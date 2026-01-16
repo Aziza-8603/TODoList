@@ -3,28 +3,68 @@ from django.contrib.auth.decorators import login_required
 from .models import Task
 from .forms import TaskForm
 
+# def home(request):
+#     # tasks = Task.objects.all()
+#     # context = {'tasks': tasks}
+#     return render(request, 'base.html')
+
+# def status_changer(request, id):
+#     task = Task.objects.filter(id=id).update(status=True)
+#     return redirect('home')
+
+# from django.shortcuts import render, redirect
+# from .models import Task
+
 def home(request):
     return render(request, 'base.html')
 
-@login_required
-def task_list(request):
-    tasks = Task.objects.filter(user=request.user)
-    return render(request, 'tasks/task_list.html', {'tasks': tasks})
 
-@login_required
-def task_create(request):
-    form = TaskForm(request.POST or None)
-    if form.is_valid():
-        task = form.save(commit=False)
-        task.user = request.user
-        task.save()
-        return redirect('tasks:list')
-    return render(request, 'tasks/task_form.html', {'form': form})
+def incomplete(request):
+    tasks = Task.objects.filter(is_completed=False)
+    return render(request, 'undone.html', {'tasks': tasks})
 
-@login_required
-def task_delete(request, pk):
-    task = get_object_or_404(Task, pk=pk, user=request.user)
-    if request.method == 'POST':
-        task.delete()
-        return redirect('tasks:list')
-    return render(request, 'tasks/task_confirm_delete.html', {'task': task})
+
+def complete(request):
+    tasks = Task.objects.filter(is_completed=True)
+    return render(request, 'done.html', {'tasks': tasks})
+
+
+def status_changer(request, id):
+    task = Task.objects.get(id=id)
+    task.is_completed = True
+    task.save()
+    return redirect('tasks:incompleted')
+
+# def delate_task(request, id):
+#     Task.objects.filter(id=id)
+#     return redirect('complete')
+
+
+def delete_task(request, id):
+    task = get_object_or_404(Task, id=id)
+    task.delete()
+    return redirect('tasks:completed')
+
+def add_task(request):
+    if request.method == "POST":
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('task_list')
+    else:
+        form = TaskForm()
+
+    return render(request, 'add_task.html', {'form': form})
+    
+# def incomplete(request):
+#     tasks = Task.objects.filter(status=False)
+#     context = {'tasks': tasks}
+#     return render (request, 'undone.html', context)
+
+# def complete(request):
+#     tasks = Task.objects.filter(is_completed=True)
+#     return render(request, 'done.html', {'tasks': tasks})
+
+# def incomplete(request):
+#     tasks = Task.objects.filter(is_completed=False)
+#     return render(request, 'undone.html', {'tasks': tasks})

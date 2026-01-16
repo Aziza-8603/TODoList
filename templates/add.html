@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
 </head>
 <body>
-
+    
         <nav class="navbar navbar-expand-lg bg-warning">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Home</a>
@@ -41,45 +42,9 @@
                 </ul>
             </div>
         </div>
-    </nav>
-
-    <div class="container d-flex flex-column justify-content-between align-items-center"
-        style="height: 300px;">
-        <h1 class="text-center mt-5">Welcome to the To Do List</h1>
-        <a href="{% url 'tasks:incompleted' %}">
-            <button type="button" class="btn btn-primary btn-lg">
-                See your upcoming works
-            </button>
-        </a>
-        <a href="{% url 'tasks:completed' %}">
-            <button type="button" class="btn btn-primary btn-lg">
-                See your completed works
-            </button>
-        </a>
-    </div>
+        </nav>
 
 
-
-
-        
-        <!-- {% for task in tasks %}
-            <br>
-            <div class="container">
-            <div class="card">
-                <h5 class="card-header">Task {{ task.id }}</h5>
-                <div class="card-body">
-                    <h5 class="card-title">{{ task.title }}</h5>
-                    <p class="card-text">{{ task.created_at }}</p>
-                    {% if task.is_completed %}
-                        <a href="#" class="btn btn-success">Completed</a>
-                    {% else %}
-                        <a href="{% url 'status_changer' task.id %}" class="btn btn-danger">Not completed</a>
-                    {% endif %}
-                </div>
-            </div>
-            </div>
-        {% endfor %} -->
-        
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
