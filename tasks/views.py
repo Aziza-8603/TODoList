@@ -54,7 +54,7 @@ def add_task(request):
     else:
         form = TaskForm()
 
-    return render(request, 'add_task.html', {'form': form})
+    return render(request, 'add.html', {'form': form})
     
 # def incomplete(request):
 #     tasks = Task.objects.filter(status=False)
