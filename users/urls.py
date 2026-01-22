@@ -1,9 +1,10 @@
 from django.urls import path
-from django.http import HttpResponse
+from .views import login_view, signup_view, logout_view
 
-def test(request):
-    return HttpResponse("Users app OK ✅")
+app_name = 'users'
 
 urlpatterns = [
-    path('', test),
-]   
+    path('login/', login_view, name='login'),
+    path('signup/', signup_view, name='signup'),
+    path('logout/', logout_view, name='logout'),
+]

@@ -6,6 +6,10 @@
     <title>Document</title>
 </head>
 <body>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
     
 </body>
 </html>

@@ -45,13 +45,25 @@
         </nav>
         <h1>Add task </h1>
 
-        <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1">@</span>
-        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-        </div>
 
->
-        
+        <h2>Добавить задачу</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add</button>
+        </form>
+
+        <a href="{% url 'tasks:home' %}">Назад</a>
+
+        <!-- <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">@</span>
+        <input type="text" class="form-control" placeholder="Task name" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+        <button type="submit">Add Task</button> 
+         <button onclick="addTask()" type="submit">Добавить</button>
+
+        <ul id="taskList"></ul> --> 
 
 
 

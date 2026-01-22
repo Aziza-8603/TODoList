@@ -3,68 +3,62 @@ from django.contrib.auth.decorators import login_required
 from .models import Task
 from .forms import TaskForm
 
-# def home(request):
-#     # tasks = Task.objects.all()
-#     # context = {'tasks': tasks}
-#     return render(request, 'base.html')
 
-# def status_changer(request, id):
-#     task = Task.objects.filter(id=id).update(status=True)
-#     return redirect('home')
-
-# from django.shortcuts import render, redirect
-# from .models import Task
-
+@login_required
 def home(request):
-    return render(request, 'base.html')
+    tasks = Task.objects.filter(user=request.user)
+    return render(request, 'base.html', {'tasks': tasks})
 
 
-def incomplete(request):
-    tasks = Task.objects.filter(is_completed=False)
-    return render(request, 'undone.html', {'tasks': tasks})
-
-
-def complete(request):
-    tasks = Task.objects.filter(is_completed=True)
-    return render(request, 'done.html', {'tasks': tasks})
-
-
-def status_changer(request, id):
-    task = Task.objects.get(id=id)
-    task.is_completed = True
-    task.save()
-    return redirect('tasks:incompleted')
-
-# def delate_task(request, id):
-#     Task.objects.filter(id=id)
-#     return redirect('complete')
-
-
-def delete_task(request, id):
-    task = get_object_or_404(Task, id=id)
-    task.delete()
-    return redirect('tasks:completed')
-
+@login_required
 def add_task(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('task_list')
+            task = form.save(commit=False)
+            task.user = request.user
+            task.save()
+            return redirect('tasks:home')
     else:
         form = TaskForm()
 
     return render(request, 'add.html', {'form': form})
-    
-# def incomplete(request):
-#     tasks = Task.objects.filter(status=False)
-#     context = {'tasks': tasks}
-#     return render (request, 'undone.html', context)
 
-# def complete(request):
-#     tasks = Task.objects.filter(is_completed=True)
-#     return render(request, 'done.html', {'tasks': tasks})
 
-# def incomplete(request):
-#     tasks = Task.objects.filter(is_completed=False)
-#     return render(request, 'undone.html', {'tasks': tasks})
+@login_required
+def incomplete(request):
+    tasks = Task.objects.filter(
+        user=request.user,
+        is_completed=False
+    )
+    return render(request, 'undone.html', {'tasks': tasks})
+
+
+@login_required
+def complete(request):
+    tasks = Task.objects.filter(
+        user=request.user,
+        is_completed=True
+    )
+    return render(request, 'done.html', {'tasks': tasks})
+
+@login_required
+def status_changer(request, id):
+    task = get_object_or_404(Task, id=id, user=request.user)
+    task.is_completed = not task.is_completed
+    task.save()
+    return redirect('tasks:home')
+
+# @login_required
+# def status_changer(request, id):
+#     task = get_object_or_404(Task, id=id, user=request.user)
+#     task.completed = not task.completed
+#     task.save()
+#     return redirect('tasks:home')
+
+
+@login_required
+def delete_task(request, id):
+    task = get_object_or_404(Task, id=id, user=request.user)
+    task.delete()
+    return redirect('tasks:home')
